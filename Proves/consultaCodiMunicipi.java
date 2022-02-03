@@ -10,9 +10,9 @@ public class consultaCodiMunicipi {
     public static void main(String[] args) throws IOException {
         Scanner s = new Scanner(System.in);
 
-        System.out.println("Indica el municipi que vols cercar: ");
+        System.out.print("Indica el municipi que vols cercar: ");
         String nomMunicipi = s.nextLine().trim();
-        System.out.println("Indica si es desitja fer una cerca aproximada 'A/a' o una cerca exacte 'E/e' del municipi introduit anteriorment: ");
+        System.out.print("\nIndica si es desitja fer una cerca aproximada 'A/a' o una cerca exacte 'E/e' del municipi introduit anteriorment: ");
         String tipusCerca = s.nextLine();
         s.close();
 
@@ -48,18 +48,31 @@ public class consultaCodiMunicipi {
 	 */
     public static String[] consultaCodiMunicipi(String nomMunicipi, String tipusCerca) throws IOException {
 
-        String[] resultat = new String [2];
+        String[] resultat = new String [2]; // taula per retornar resultats amb @return
         int posicioComa =0;
         String liniaQCSV;
 
         // Passem el municipi per l'URLEncoder per codificar els caràcters
         // que calgui perquè sigui vàlid com a part d'un URL.
         String nomMunicipiURL = URLEncoder.encode(nomMunicipi, "UTF-8");
+        URL urlMunicipis;
+
+        // Fem un filtre per fer el tipos de cerca que ha indicat l'usuari
+            // Creem un objecte de tipus URL, passant-li l'URL de connexió en forma
+            // d'String, en el format que demana l'API "Catàleg de farmàcies de Catalunya",
+            // inserint (concatenant) el nom del municipi "URL encoded" allà on toca.            
+        if(tipusCerca.equalsIgnoreCase("a")){    
+            urlMunicipis = new URL("https://analisi.transparenciacatalunya.cat/resource/byd8-nf5f.csv?$where=nivell_poblacional=\"Municipi\"+and+contains(lower(nom),\""+nomMunicipiURL.toLowerCase()+"\")");
+        }
+        else if (tipusCerca.equalsIgnoreCase("e")){
+            urlMunicipis = new URL("https://analisi.transparenciacatalunya.cat/resource/byd8-nf5f.csv?$where=nivell_poblacional=\"Municipi\"+and+lower(nom)=\""+nomMunicipiURL.toLowerCase()+"\"");
+        }
+        else{
+            System.out.println("Com no has indicat correctament el tipus de cerca, s'aplicara automaticment la cerca aproximada");
+            urlMunicipis = new URL("https://analisi.transparenciacatalunya.cat/resource/byd8-nf5f.csv?$where=nivell_poblacional=\"Municipi\"+and+contains(lower(nom),\""+nomMunicipiURL.toLowerCase()+"\")");
+        }
         
-        // Creem un objecte de tipus URL, passant-li l'URL de connexió en forma
-        // d'String, en el format que demana l'API "Catàleg de farmàcies de Catalunya",
-        // inserint (concatenant) el nom del municipi "URL encoded" allà on toca.        
-        URL urlMunicipis = new URL("https://analisi.transparenciacatalunya.cat/resource/byd8-nf5f.csv?$where=nivell_poblacional=\"Municipi\"+and+contains(lower(nom),\""+nomMunicipiURL+"\")");
+        
 
 		// Creem un Scanner, associant-lo a l'objecte URL que acabem de crear.
         Scanner sURL;
