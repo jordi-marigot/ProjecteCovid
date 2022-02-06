@@ -18,6 +18,8 @@ public class projectaJordiM {
 
         String[] respostaFuncioCodi = consultaCodiMunicipi(nomMunicipi, tipusCerca);
         String codiMunicipi = respostaFuncioCodi[0]; // obtenir nomes el codiMunicipi, sense el nom.
+        
+        // Avisar al Usuari de un error de cerca del municipi indicat
         if(codiMunicipi != null){
             System.out.printf("Num casos en el municipi %s: %d",respostaFuncioCodi[1],consultaCasosCovid(codiMunicipi));
         }
@@ -49,6 +51,8 @@ public class projectaJordiM {
 	 *                     cap municipi català que compleixi les condicions de cerca,
 	 *                     l'array retornat valdrà null. Si algun dels dos paràmetres
 	 *                     val nul o és buit, també es retornarà null.
+     *                     Aixi que mostrara un missatge indicat que no s'ha trobat 
+     *                     el municipi indicat.
 	 *                             
 	 * @throws IOException  La funció pot generar errors d'entrada/sortida no
 	 *                      controlats, ja que el tema de gestió d'errors i
