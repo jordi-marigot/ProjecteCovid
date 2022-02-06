@@ -5,18 +5,19 @@ import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class consultaCodiMunicipi {
+public class consultaCasosCovid {
 
     public static void main(String[] args) throws IOException {
         Scanner s = new Scanner(System.in);
 
         System.out.print("Indica el municipi que vols cercar: ");
         String nomMunicipi = s.nextLine().trim();
-        System.out.print("\nIndica si es desitja fer una cerca aproximada 'A/a' o una cerca exacte 'E/e' del municipi introduit anteriorment: ");
+        System.out.print("Indica si es desitja fer una cerca aproximada 'A/a' o una cerca exacte 'E/e' del municipi introduit anteriorment: ");
         String tipusCerca = s.nextLine();
         s.close();
 
-        System.out.println(Arrays.toString(consultaCodiMunicipi(nomMunicipi, tipusCerca)));
+        String[] respostaFuncioCodi = consultaCodiMunicipi(nomMunicipi, tipusCerca);
+        String codiMunicipi = respostaFuncioCodi[0]; // obtenir nomes el codiMunicipi, sense el nom.
         
     }
 	/**
@@ -91,19 +92,15 @@ public class consultaCodiMunicipi {
                 // Busquem la variable sitada a la posició 1 on indicara el nom del municipi i l'extraiem a una taula
                 if (i == 1){
                     String nomMunicipiQCSV = liniaQCSV.substring(posicioComa + 3, liniaQCSV.indexOf("*,*", posicioComa+1));
-                    resultat[0] = nomMunicipiQCSV;
+                    resultat[1] = nomMunicipiQCSV;
                 }
 
                 // Busquem la variable sitada a la posició 2 on indicara el codi del municipi i l'extraiem a una taula
                 if (i == 2){
                     String codiMunicipiQCSV = liniaQCSV.substring(posicioComa + 3, liniaQCSV.indexOf("*,*", posicioComa+1));
-                    resultat[1] = codiMunicipiQCSV;
+                    resultat[0] = codiMunicipiQCSV;
                 }
             }
         }
-        
-        sURL.close();
         return resultat;
-
 	}
-}
